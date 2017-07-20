@@ -1,13 +1,17 @@
 package org.launchcode.controllers;
 
+import org.launchcode.models.Category;
+import org.launchcode.models.Cheese;
 import org.launchcode.models.Menu;
 import org.launchcode.models.data.CheeseDao;
 import org.launchcode.models.data.MenuDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * Created by alees on 7/20/2017.
@@ -35,4 +39,22 @@ public class MenuController {
         return "menu/add";
     }
 
+    @RequestMapping(value = "add", method = RequestMethod.POST)
+    public String processAddMenuForm(Model model, @ModelAttribute @Valid Menu
+            newMenu, Errors errors) {
+
+        if (errors.hasErrors()){
+            model.addAttribute("title", "Add Menu");
+            return "menu/add";
+        }
+
+        menuDao.save(newMenu);
+        return "redirect:view/" + newMenu.getId();
+    }
+
+    @RequestMapping(value = "view/{id}", method = RequestMethod.GET)
+    public String viewMenu(@PathVariable int id, Model model){
+        model.addAttribute("menu", menuDao.findOne(id));
+        return "menu/view";
+    }
 }
