@@ -12,7 +12,9 @@
         <label th:for="cheeseId">Name</label>
         <select class="form-control" name="cheeseId">
             <!-- I fixed the error, I had preceded {cheeses} with a $ rather than a *. -->
-            <option th:each="cheese : *{cheeses}" th:text="${cheese.name}"></option>
+            <option th:each="cheese : *{cheeses}"
+                    th:text="${cheese.name}"
+                    th:value="${cheese.id}"></option>
         </select>
         <input type="hidden" name="menuId" th:value="*{menu.id}" />
         <span th:errors="*{cheeseId}" class="error"></span>
