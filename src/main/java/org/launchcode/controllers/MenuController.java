@@ -61,9 +61,18 @@ public class MenuController {
 
     @RequestMapping(value = "add-item/{id}", method = RequestMethod.GET)
     public String addItem(@PathVariable int id, Model model){
-        AddMenuItemForm form = new AddMenuItemForm(menuDao.findOne(id), cheeseDao
-                .findAll());
-        model.addAttribute("form", form);
+        //Right now, I think that cheeseDao.findAll() is not passing the complete list of cheese, but I am unsure why.
+        //It is passing the complete list, but the constructor is
+        // somehow messing up or it is getting messed up in my
+        // html, which I think is more likely.
+        AddMenuItemForm newForm = new AddMenuItemForm(menuDao.findOne(id), cheeseDao.findAll());
+        model.addAttribute("form", newForm);
+
+        //Just trying something here to see if cheeseDao.findAll() returns anything.
+        //This does return something! I used the view to check this attribute versus the newForm.cheeses that was built from the same thing and we are
+        // having issues. Not sure what is happening.
+        model.addAttribute("Cheeses", cheeseDao.findAll());
+
         model.addAttribute("title", "Add item to menu: " +
                 menuDao.findOne(id).getName());
         return "menu/add-item";
