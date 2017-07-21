@@ -7,15 +7,13 @@
 <nav th:replace="fragments :: navigation"></nav>
 
 
-<p th:unless="${Cheeses}">No cheeses.</p>
-<p th:text="${Cheeses}"></p>
 
 <form method="post" style="max-width:600px;" th:object="${form}">
     <div class="form-group">
         <label th:for="cheeseId">Name</label>
-        <select class="form-control" th:field="*{cheeseId}">
-            <option th:unless="${cheeses}" value="1">No cheeses.</option>
-            <option th:each="cheese : ${cheeses}" th:text="${cheese.name}"></option>
+        <select class="form-control" name="cheeseId">
+            <!-- I fixed the error, I had preceded {cheeses} with a $ rather than a *. -->
+            <option th:each="cheese : *{cheeses}" th:text="${cheese.name}"></option>
         </select>
         <input type="hidden" name="menuId" th:value="*{menu.id}" />
         <span th:errors="*{cheeseId}" class="error"></span>
